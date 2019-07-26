@@ -22,7 +22,11 @@
 
     <%= label t, :name %>
     <%= text_input t, :name %>
+    <%= if t.hidden && t.hidden[:id] do %>
+      <%= link "delete", to: Routes.album_path(@conn, :delete_track, t.hidden[:id]) %>
+    <% end %>
     <%= error_tag t, :name %>
+
 
   <% end %>
 

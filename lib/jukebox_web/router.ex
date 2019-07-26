@@ -18,6 +18,7 @@ defmodule JukeboxWeb.Router do
 
     get "/", PageController, :index
     resources "/albums", AlbumController
+    get "/track/:id", AlbumController, :delete_track
   end
 
   # Other scopes may use custom stacks.

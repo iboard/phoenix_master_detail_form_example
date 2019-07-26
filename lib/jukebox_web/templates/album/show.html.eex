@@ -14,5 +14,16 @@
 
 </ul>
 
+<h2>Tracks</h2>
+
+<ol>
+  <%= for track <- @album.tracks do %>
+    <li><%= track.name %></li>
+  <% end %>
+</ol>
+
+
+
+
 <span><%= link "Edit", to: Routes.album_path(@conn, :edit, @album) %></span>
 <span><%= link "Back", to: Routes.album_path(@conn, :index) %></span>

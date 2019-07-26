@@ -3,6 +3,10 @@ defmodule JukeboxWeb.AlbumController do
 
   alias Jukebox.Albums
   alias Jukebox.Albums.Album
+  alias Jukebox.Albums.Track
+  alias Jukebox.Repo
+
+  import Ecto.Query, only: [from: 2]
 
   def index(conn, _params) do
     albums = Albums.list_albums()
@@ -19,7 +23,7 @@ defmodule JukeboxWeb.AlbumController do
       {:ok, album} ->
         conn
         |> put_flash(:info, "Album created successfully.")
-        |> redirect(to: Routes.album_path(conn, :show, album))
+        |> redirect(to: Routes.album_path(conn, :edit, album))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -44,7 +48,7 @@ defmodule JukeboxWeb.AlbumController do
       {:ok, album} ->
         conn
         |> put_flash(:info, "Album updated successfully.")
-        |> redirect(to: Routes.album_path(conn, :show, album))
+        |> redirect(to: Routes.album_path(conn, :edit, album))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", album: album, changeset: changeset)
@@ -57,6 +61,19 @@ defmodule JukeboxWeb.AlbumController do
 
     conn
     |> put_flash(:info, "Album deleted successfully.")
-    |> redirect(to: Routes.album_path(conn, :index))
+    |> redirect(to: Routes.album_path(conn, :show))
+  end
+
+  def delete_track(conn, %{"id" => id}) do
+    track =
+      from(t in Track,
+        where: t.id == ^id
+      )
+      |> Repo.one()
+
+    track
+    |> Repo.delete()
+
+    redirect(conn, to: Routes.album_path(conn, :edit, track.album_id))
   end
 end
